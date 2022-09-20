@@ -1,0 +1,6 @@
+cradle:
+  stack:
+    - path: "./lecture-notes"
+      component: "CS316-Y2021:lib"
+    - path: "./src"
+      component: "CS316-Y2021:exe:hello-cs316"
