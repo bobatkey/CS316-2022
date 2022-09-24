@@ -116,8 +116,8 @@ catMarkup = undefined
       automatic insertion of spaces. Write another function that
       concatenates a list of 'Markup's putting spaces between them: -}
 
-catMaybeSpaced :: [Markup] -> Markup
-catMaybeSpaced = undefined
+catMarkupSpaced :: [Markup] -> Markup
+catMarkupSpaced = undefined
 
 {-    Sometimes we want to remove all formatting from a piece of
       text. Write a function that removes all 'Bold' and 'Italic'
