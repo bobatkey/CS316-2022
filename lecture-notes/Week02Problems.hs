@@ -134,7 +134,7 @@ type Record = [(String,String)]
 -- > lookupField "c" [("a","1"),("b","3")]
 -- returns @Nothing@.
 lookupField :: String -> Record -> Maybe String
-lookupField fieldname records =
+lookupField fieldname record =
   error "lookupField: not implemented"
 
 -- | Given a header listing field names, like:
