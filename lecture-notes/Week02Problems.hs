@@ -135,7 +135,7 @@ type Record = [(String,String)]
 -- returns @Nothing@.
 lookupField :: String -> Record -> Maybe String
 lookupField fieldname records =
-  Error "lookupField: not implemented"
+  error "lookupField: not implemented"
 
 -- | Given a header listing field names, like:
 --
@@ -153,14 +153,14 @@ lookupField fieldname records =
 -- number of fields in the row, an @Nothing@ should be returned.
 rowToRecord :: [String] -> Row -> Maybe Record
 rowToRecord header row =
-  Error "rowToRecord: not implemented"
+  error "rowToRecord: not implemented"
 
 -- | Given a header listing field names, and a list of rows, converts
 -- each row into a record. See 'rowToRecord' for how individual rows
 -- are converted to records.
 rowsToRecords :: [String] -> [Row] -> Maybe [Record]
 rowsToRecords header rows =
-  Error "rowsToRecord: not implemented"
+  error "rowsToRecord: not implemented"
 
 -- | Given a header listing field names, like:
 --
@@ -185,11 +185,11 @@ rowsToRecords header rows =
 -- the header are not in the record.
 recordToRow :: [String] -> Record -> Maybe Row
 recordToRow header record =
-  Error "recordToRow: not implemented"
+  error "recordToRow: not implemented"
 
 -- | Given a header listing field names, and a list of records,
 -- converts each record into a row. See 'recordToRow' for how
 -- individual records are converted to rows.
 recordsToRows :: [String] -> [Record] -> Maybe [Row]
 recordsToRows header records =
-  Error "recordsToRows: not implemented"
+  error "recordsToRows: not implemented"
