@@ -105,3 +105,91 @@ makeChangeAll = undefined
 
 {- HINT: you don't need a case expression, just a way of appending two
    lists of possibilities. -}
+
+{- 7. This question involves converting between two datatypes. A 'Row'
+      is a list of strings, such as you might find in a database: -}
+
+-- | A row is a list of strings, one for each field. For example:
+--
+-- > ["Mount Snowden", "Wales"]
+type Row = [String]
+
+{-    Note that the names of the fields, which might be 'Mountain' and
+      'Country' here, are implicit in this representation.
+
+      The second type is a record, which is a list of pairs of field
+      names with their data: -}
+
+-- | A record is a list of fieldname / value pairs. For example:
+--
+-- > [("Mountain", "Mont Blanc"), ("Country", "France")]
+type Record = [(String,String)]
+
+{-    Implement the following functions on rows and records: -}
+
+-- | Look up a field in a record, returning @Nothing@ if the field is
+-- not in the record. For example,
+-- > lookupField "a" [("a","1"),("b","2")]
+-- returns @Just "1"@, but
+-- > lookupField "c" [("a","1"),("b","3")]
+-- returns @Nothing@.
+lookupField :: String -> Record -> Maybe String
+lookupField fieldname records =
+  Error "lookupField: not implemented"
+
+-- | Given a header listing field names, like:
+--
+-- >  ["Mountain", "Country"]
+--
+-- and a row like:
+--
+-- >   ["Ben Nevis", "Scotland"]
+--
+-- turn it into a record like:
+--
+-- >   [("Mountain", "Ben Nevis"), ("Country", "Scotland")]
+--
+-- If the number of field names in the header does not match the
+-- number of fields in the row, an @Nothing@ should be returned.
+rowToRecord :: [String] -> Row -> Maybe Record
+rowToRecord header row =
+  Error "rowToRecord: not implemented"
+
+-- | Given a header listing field names, and a list of rows, converts
+-- each row into a record. See 'rowToRecord' for how individual rows
+-- are converted to records.
+rowsToRecords :: [String] -> [Row] -> Maybe [Record]
+rowsToRecords header rows =
+  Error "rowsToRecord: not implemented"
+
+-- | Given a header listing field names, like:
+--
+-- >   ["Mountain", "Country"]
+--
+-- and a record like:
+--
+-- >   [("Mountain", "Ben Nevis"), ("Country", "Scotland")]
+--
+-- turn it into a row like:
+--
+-- >   ["Ben Nevis", "Scotland"]
+--
+-- It does not matter what order the fields in the record are in, so the
+-- record:
+--
+-- >   [("Country", "Scotland"), ("Mountain", "Ben Nevis")]
+--
+-- should result in the same row.
+--
+-- This function returns an @Nothing@ if any of the field names listed in
+-- the header are not in the record.
+recordToRow :: [String] -> Record -> Maybe Row
+recordToRow header record =
+  Error "recordToRow: not implemented"
+
+-- | Given a header listing field names, and a list of records,
+-- converts each record into a row. See 'recordToRow' for how
+-- individual records are converted to rows.
+recordsToRows :: [String] -> [Record] -> Maybe [Row]
+recordsToRows header records =
+  Error "recordsToRows: not implemented"
