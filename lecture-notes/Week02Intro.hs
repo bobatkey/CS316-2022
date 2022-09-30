@@ -89,7 +89,6 @@ isTreeMember y (Node l x r) =
 -}
   case compare y x of
     EQ -> True
---     _  -> isTreeMember y l || isTreeMember y r
     LT -> isTreeMember y l
     GT -> isTreeMember y r
 isTreeMember y Leaf         = False
@@ -118,6 +117,7 @@ getKey k (Node l (k', v) r) =
 getKeys :: Ord a => [a] -> Tree (a,b) -> Maybe [b]
 getKeys []     tree = Just []
 getKeys (k:ks) tree =
+--  What we would like to write:   'getKey k tree : getKeys ks tree'
   case getKey k tree of
     Nothing ->
       Nothing
@@ -127,4 +127,3 @@ getKeys (k:ks) tree =
           Nothing
         Just vs ->
           Just (v:vs)
---  getKey k tree : getKeys ks tree

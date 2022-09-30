@@ -22,6 +22,8 @@ executable hello-cs316
 library
   hs-source-dirs:      lecture-notes
   exposed-modules:     Week01,
+                       Week01Intro,
+                       Week01Intro02,
                        Week01Problems,
                        Week01Solutions,
                        Week02,
@@ -29,6 +31,7 @@ library
                        Week02Problems,
                        Week02Solutions,
                        Week03,
+                       Week03Problems,
                        Week04,
                        Week05,
                        Week06,
