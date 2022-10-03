@@ -1,6 +1,6 @@
 cradle:
   stack:
     - path: "./lecture-notes"
-      component: "CS316-Y2021:lib"
+      component: "CS316-Y2022:lib"
     - path: "./src"
-      component: "CS316-Y2021:exe:hello-cs316"
+      component: "CS316-Y2022:exe:hello-cs316"
