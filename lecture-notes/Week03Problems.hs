@@ -232,5 +232,5 @@ subst = undefined
    give a 'Bool' for each atom, and correspondingly, may or may not
    give a 'Bool' for the whole formula. -}
 
-evalMaybe :: (String -> Maybe Bool) -> Formula -> Bool
+evalMaybe :: (String -> Maybe Bool) -> Formula -> Maybe Bool
 evalMaybe = undefined
