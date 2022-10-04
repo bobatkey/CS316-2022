@@ -104,6 +104,8 @@ exampleKV :: Tree (String,Int)
 exampleKV = Node (Node Leaf ("a",1) Leaf) ("b",2) Leaf
 
 -- getKey
+-- Optional<B> getKey(A a, Tree<A,B> t) throws KeyNotFound
+
 getKey :: Ord a => a -> Tree (a,b) -> Maybe b
 getKey k Leaf = Nothing
 getKey k (Node l (k', v) r) =
@@ -117,13 +119,57 @@ getKey k (Node l (k', v) r) =
 getKeys :: Ord a => [a] -> Tree (a,b) -> Maybe [b]
 getKeys []     tree = Just []
 getKeys (k:ks) tree =
---  What we would like to write:   'getKey k tree : getKeys ks tree'
   case getKey k tree of
-    Nothing ->
-      Nothing
+    Nothing -> Nothing
     Just v ->
       case getKeys ks tree of
-        Nothing ->
-          Nothing
+        Nothing -> Nothing
         Just vs ->
           Just (v:vs)
+
+getKeys0 :: Ord a => [a] -> Tree (a,b) -> [Maybe b]
+getKeys0 []     tree = []
+getKeys0 (k:ks) tree = getKey k tree : getKeys0 ks tree
+
+-- getKeys ks tree = catMaybes (getKeys0 ks tree)
+
+catMaybes0 :: [Maybe a] -> Maybe [a]
+catMaybes0 list = if isThereANothing list then Nothing else Just (extractJusts list)
+
+extractJusts :: [Maybe a] -> [a]
+extractJusts [] = []
+extractJusts (Just x:xs) = x : extractJusts xs
+extractJusts (Nothing:xs) = extractJusts xs
+
+isThereANothing :: [Maybe a] -> Bool
+isThereANothing []            = False
+isThereANothing (Nothing : _) = True
+isThereANothing (Just _ : xs) = isThereANothing xs
+
+catMaybes :: [Maybe a] -> Maybe [a]
+catMaybes []          = Just []
+catMaybes (Nothing:_) = Nothing
+catMaybes (Just x:xs) =
+  case catMaybes xs of
+    Nothing -> Nothing
+    Just ys -> Just (x:ys)
+
+-- catMaybes [Just 1, Just 2, Just 3]  == Just [1,2,3]
+-- catMaybes [Nothing, Just 1, Just 2] == Nothing
+-- catMaybes [Just 1, Nothing, Just 2] == Nothing
+
+{-  if (itIsSafe) {
+       //
+
+       do thing that might fail
+    }
+-}
+
+{-
+getKeys list tree =
+  case list of
+    [] ->
+      Just []
+    (k:ks) ->
+      -- as above
+-}
