@@ -72,6 +72,7 @@ solutions will be released after the session.
   - [Tutorial Solutions](lecture-notes/Week03Solutions.hs)
   - [Live Lecture Notes](lecture-notes/Week03Intro01.hs)
 - [Week 4](lecture-notes/Week04.hs) : Patterns of Recursion
+  - [Tutorial Problems](lecture-notes/Week04Problems.hs)
 - [Week 5](lecture-notes/Week05.hs) : Classes of Types
 - [Week 6](lecture-notes/Week06.hs) : Simulating side-effects: Exceptions, State, and Printing
 - [Week 7](lecture-notes/Week07.hs) : Monads
