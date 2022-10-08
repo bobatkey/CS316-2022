@@ -69,6 +69,7 @@ solutions will be released after the session.
   - [Live Lecture Notes (Friday)](lecture-notes/Week02Intro.hs).
 - [Week 3](lecture-notes/Week03.hs) : Higher Order Functions
   - [Tutorial Problems](lecture-notes/Week03Problems.hs)
+  - [Tutorial Solutions](lecture-notes/Week03Solutions.hs)
   - [Live Lecture Notes](lecture-notes/Week03Intro01.hs)
 - [Week 4](lecture-notes/Week04.hs) : Patterns of Recursion
 - [Week 5](lecture-notes/Week05.hs) : Classes of Types
