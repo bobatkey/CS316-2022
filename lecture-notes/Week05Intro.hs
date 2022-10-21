@@ -130,12 +130,19 @@ data Maybe a
 
 -- typeclass : specification for a group of functions that a type may have
 
+{- class Eq a where
+     (==) :: a -> a -> Bool
+     (/=) :: a -> a -> Bool
+     x /= y = not (x == y)
+     x == y = not (x /= y)
+-}
+
 newtype CaseInsenstiveString =
-  MkCISString String
+  MkCIString String
 --   deriving (Eq)
 
 instance Eq CaseInsenstiveString where
-  MkCISString x == MkCISString y =
+  MkCIString x == MkCIString y =
     map toUpper x == map toUpper y
 
 -- Type classes:
@@ -144,4 +151,116 @@ instance Eq CaseInsenstiveString where
 --  - Codify certain patterns of behaviour as interfaces
 
 
+
+
+
+
 {-    Part 03 : Semigroups and Monoids -}
+
+--              Addable        AddableWithAZero
+
+-- Typeclass design:
+--   - A type is an X if it supports functions A, B, C ...
+--   - How do we choose what things to call interfaces?
+--   - Can be tricky to find coherent abstractions
+
+class Semigroup a where
+  (<>) :: a -> a -> a
+
+instance Semigroup Int where
+  x <> y = x + y
+
+instance Semigroup Bool where
+  x <> y = x && y
+
+instance Semigroup [a] where
+  x <> y = x ++ y
+
+data Maybe a = Nothing | Just a deriving Show
+
+-- Take the first
+instance Semigroup (Maybe a) where
+  Nothing <> x = x
+  Just a  <> _ = Just a
+
+-- Combine the successes
+{-
+instance Semigroup a => Semigroup (Maybe a) where
+  Nothing <> x = x
+  x <> Nothing = x
+  Just a <> Just b = Just (a <> b)
+-}
+
+-- Law of a semigroup:
+--    a <> (b <> c) = (a <> b) <> c   -- associativity
+
+--    a <> b <> c <> d
+--    a <> (b <> (c <> d))  -- sequential
+--    (a <> b) <> (c <> d)  -- parallel
+
+--    a <> b = b <> a  --- NOT REQUIRED commutativity
+
+class Semigroup a => Monoid a where
+  mempty :: a
+
+-- mempty <> x = x
+-- x <> mempty = x
+
+instance Monoid Int where
+  mempty = 0
+
+instance Monoid Bool where
+  mempty = True
+
+instance Monoid [a] where
+  mempty = []
+
+instance Monoid (Maybe a) where
+  mempty = Nothing
+
+
+{-    Part 04 : Foldable -}
+
+crush :: Monoid a => [a] -> a
+crush []     = mempty
+crush (x:xs) = x <> crush xs
+
+data Tree a
+  = Leaf
+  | Node (Tree a) a (Tree a)
+  deriving Show
+
+crushTree :: Monoid a => Tree a -> a
+crushTree Leaf         = mempty
+crushTree (Node l x r) = crushTree l <> x <> crushTree r
+
+class Foldable c where
+  fold :: Monoid a => c a -> a
+
+instance Foldable [] where
+  fold = crush
+
+instance Foldable Tree where
+  fold = crushTree
+
+{-    Part 05 : Functor / Mappable -}
+
+-- addLengths :: [String] -> Int
+-- addLengths = fold . map length
+
+class Functor c where
+  fmap :: (a -> b) -> c a -> c b
+
+forall :: (Foldable c, Functor c) => (a -> Bool) -> c a -> Bool
+forall p = fold . fmap p
+    --   = \x -> fold (fmap p x)
+
+-- f . g = \x -> f (g x)
+
+
+{- combining fmap and fold covers a broad range of programming problems.
+
+   with a bit more work it is amenable to parallelism
+
+   lifts the level of abstraction in programming
+-}
