@@ -81,6 +81,7 @@ solutions will be released after the session.
   - [Live Lecture Notes](lecture-notes/Week05Intro.hs)
 - [Week 6](lecture-notes/Week06.hs) : Simulating side-effects: Exceptions, State, and Printing
   - [Tutorial Problems](lecture-notes/Week06Problems.hs)
+  - [Tutorial Solutions](lecture-notes/Week06Solutions.hs)
   - [Live Lecture Notes](lecture-notes/Week06Intro.hs)
 - [Week 7](lecture-notes/Week07.hs) : Monads
 - [Week 8](lecture-notes/Week08.hs) : Real I/O and Parser Combinators
