@@ -88,6 +88,8 @@ solutions will be released after the session.
   - [Tutorial Solutions](lecture-notes/Week07Solutions.hs)
   - [Live Lecture Notes](lecture-notes/Week07Intro.hs)
 - [Week 8](lecture-notes/Week08.hs) : Real I/O and Parser Combinators
+  - [Tutorial Problems](lecture-notes/Week08Problems.hs)
+  - [Tutorial Solutions](lecture-notes/Week08Solutions.hs)
 - [Week 9](lecture-notes/Week09.hs) : Data Dependencies and Applicative Functors
 - [Week 10](lecture-notes/Week10.hs) : Lazy Evaluation and Infinite Data
 
