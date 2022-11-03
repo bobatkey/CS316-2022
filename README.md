@@ -85,6 +85,7 @@ solutions will be released after the session.
   - [Live Lecture Notes](lecture-notes/Week06Intro.hs)
 - [Week 7](lecture-notes/Week07.hs) : Monads
   - [Tutorial Problems](lecture-notes/Week07Problems.hs)
+  - [Tutorial Solutions](lecture-notes/Week07Solutions.hs)
   - [Live Lecture Notes](lecture-notes/Week07Intro.hs)
 - [Week 8](lecture-notes/Week08.hs) : Real I/O and Parser Combinators
 - [Week 9](lecture-notes/Week09.hs) : Data Dependencies and Applicative Functors
