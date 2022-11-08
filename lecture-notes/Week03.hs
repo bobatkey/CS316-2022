@@ -374,11 +374,11 @@ dropTrailingSpaces2 = compose reverse (compose dropSpaces reverse)
 
 {- which makes clear that it is the composition of three functions.
 
-   Writing it like this isn't much clear as it is, but 'compose' is so
-   useful that the Haskell standard library calls it '.', and it is
-   written infix (in between its arguments). The '.'  is meant to
-   mimic in ASCII the mathematical circle notation for function
-   composition.
+   Writing it like this isn't much clearer as it is, due to the
+   repeated use of 'compose'. But 'compose' is so useful that the
+   Haskell standard library calls it '.', and it is written infix (in
+   between its arguments). The '.'  is meant to mimic in ASCII the
+   mathematical circle notation for function composition.
 
    Here is a definition of '.', written using the '\'/lambda notation: -}
 
