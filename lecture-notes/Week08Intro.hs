@@ -91,11 +91,6 @@ parseBool_v1 _       = Nothing
 
 -- True,False
 
-newtype Parser a = MkParser (String -> Maybe (a, String))
-
-runParser :: Parser a -> String -> Maybe (a, String)
-runParser (MkParser p) = p
-
 -- parsing booleans
 parseBool :: Parser Bool
 parseBool = MkParser (\input -> case input of
@@ -119,8 +114,186 @@ parseComma = MkParser (\input -> case input of
                                    ',':rest -> Just ((), rest)
                                    _        -> Nothing)
 
--- Monad
+newtype Parser a = MkParser (String -> Maybe (a, String))
 
--- Using the monad
+runParser :: Parser a -> String -> Maybe (a, String)
+runParser (MkParser p) = p
+
+
+-- Monad: 'return' and '>>='
+
+-- 'orElse', and 'fail'
 
 -- char
+
+instance Monad Parser where
+  return x = MkParser (\input -> Just (x, input))
+
+  MkParser p >>= k =
+    MkParser (\input ->
+                case p input of
+                  Nothing -> Nothing
+                  Just (a, input') ->
+                    case k a of
+                      MkParser p2 ->
+                        p2 input')
+
+instance Applicative Parser where
+  pure = return
+  pf <*> pa = do f <- pf; a <- pa; return (f a)
+
+instance Functor Parser where
+  fmap f p = pure f <*> p
+
+orElse :: Parser a -> Parser a -> Parser a
+orElse (MkParser p1) (MkParser p2) =
+  MkParser (\input ->
+              case p1 input of
+                Nothing -> p2 input
+                Just (a,input') -> Just (a,input'))
+
+failParse :: Parser a
+failParse = MkParser (\input -> Nothing)
+
+-- p `orElse` fail == fail `orElse` p == p
+
+char :: Parser Char
+char = MkParser (\input -> case input of
+                             c:input' -> Just (c, input')
+                             []       -> Nothing)
+
+------------------------------------------------------------------------------
+
+isChar :: Char -> Parser ()
+isChar expected =
+  do got <- char
+     if got == expected then return () else failParse
+
+parseTrue :: Parser Bool
+parseTrue =
+  do isString "True"
+     return True
+
+parseFalse :: Parser Bool
+parseFalse =
+  do isString "False"
+     return False
+
+isString :: String -> Parser ()
+isString expected = for_ expected (\c -> isChar c)
+
+parseBoolean :: Parser Bool
+parseBoolean = parseTrue `orElse` parseFalse
+
+listOfBooleans :: Parser [Bool]
+listOfBooleans =
+  (do b <- parseBoolean
+      isString ","
+      bs <- listOfBooleans
+      return (b:bs))
+  `orElse`
+  (do b <- parseBoolean
+      return [b])
+
+sepBy1 :: Parser () -> Parser a -> Parser [a]
+sepBy1 pSep pValue =
+  (do b <- pValue
+      pSep
+      bs <- sepBy pSep pValue
+      return (b:bs))
+  `orElse`
+  (do b <- pValue
+      return [b])
+
+sepBy :: Parser () -> Parser a -> Parser [a]
+sepBy pSep pValue = sepBy1 pSep pValue `orElse` return []
+
+-- JSON : JavaScript Object Notation
+
+data JSON
+  = Number Int      -- 12, 45645, 0
+  | Bool Bool       -- true, false
+  | Null            -- null
+  | String String   -- "hello \"world\""    "\"hello \\\"world\\\"\""
+  | Array [JSON]    -- [ 1, true, null, "a", [1,2,3] ]
+  | Object [(String,JSON)]  -- { "hello": [1,2], "field": null }
+  deriving Show
+
+
+parseJSONBool :: Parser Bool
+parseJSONBool =
+  do isString "true"
+     return True
+  `orElse`
+  do isString "false"
+     return False
+
+parseJSONNull :: Parser ()
+parseJSONNull =
+  isString "null"
+
+
+parseStringChar :: Parser Char
+parseStringChar =
+  do c <- char
+     case c of
+       '"'  -> failParse
+       '\\' -> do c <- char
+                  return c
+       c    -> return c
+
+zeroOrMore :: Parser a -> Parser [a]
+zeroOrMore p =
+  do x <- p
+     xs <- zeroOrMore p
+     return (x:xs)
+  `orElse`
+  return []
+
+parseString :: Parser String
+parseString = do
+  isChar '"'
+  content <- zeroOrMore parseStringChar
+  isChar '"'
+  return content
+
+parseArray :: Parser a -> Parser [a]
+parseArray pValue =
+  do isChar '['
+     items <- sepBy (isChar ',') pValue
+     isChar ']'
+     return items
+
+parseObject :: Parser a -> Parser [(String,a)]
+parseObject pValue =
+  do isChar '{'
+     items <- sepBy (isChar ',') (do fieldname <- parseString
+                                     isChar ':'
+                                     value <- pValue
+                                     return (fieldname, value))
+     isChar '}'
+     return items
+
+parseJSON :: Parser JSON
+parseJSON =
+  do b <- parseJSONBool
+     return (Bool b)
+  `orElse`
+  do parseJSONNull
+     return Null
+  `orElse`
+  do str <- parseString
+     return (String str)
+  `orElse`
+  do items <- parseArray parseJSON
+     return (Array items)
+  `orElse`
+  do items <- parseObject parseJSON
+     return (Object items)
+
+testInput = "{\"a\":true,\"b\":[false,null,\"c\"]}"
+
+-- Now we should be able to parse JSON:
+--
+--   > runParser parseJSON testInput
+--   Just (Object [("a",Bool True),("b",Array [Bool False,Null,String "c"])],"")
