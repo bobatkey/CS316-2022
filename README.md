@@ -68,6 +68,7 @@ The notes are Haskell files with interleaved code and commentary. You are encour
   - [Tutorial Solutions](lecture-notes/Week08Solutions.hs)
   - [Live Lecture Notes](lecture-notes/Week08Intro.hs)
 - [Week 9](lecture-notes/Week09.hs) : Data Dependencies and Applicative Functors
+  - [Live Lecture Notes](lecture-notes/Week09Intro.hs)
 - [Week 10](lecture-notes/Week10.hs) : Lazy Evaluation and Infinite Data
 
 You can take a look at [last year's repository](https://github.com/bobatkey/CS316-2021) and [the one before that](https://github.com/bobatkey/CS316-2020) for similar notes and some different exercises.
