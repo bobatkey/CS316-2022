@@ -680,9 +680,9 @@ concurrentMessages =
      WhatsApp).
 
    Haskell uses an interesting take on shared memory that avoids some
-   of the issues with synchronisation, and has some of . The basic primitive for
-   inter-thread communication is the 'MVar': a special kind of mutable
-   variable that has the following properties:
+   of the issues with synchronisation, and has some of . The basic
+   primitive for inter-thread communication is the 'MVar': a special
+   kind of mutable variable that has the following properties:
 
    - MVars start off empty.
 
@@ -992,6 +992,8 @@ fetchTitlesSequential =
 fetchTitlesParallel :: Fetch (Maybe String, Maybe String, Maybe String)
 fetchTitlesParallel =
   pure (,,) <*> titleOfTodoId 1 <*> titleOfTodoId 12 <*> titleOfTodoId 123
+
+  -- (,,) is shorthand for \t1 t2 t3 -> (t1, t2, t3)
 
 {- We can see the difference when we run them in GHCi. First the
    sequential one:

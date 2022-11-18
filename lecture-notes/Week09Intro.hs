@@ -180,3 +180,79 @@ parallelRequests =
    distinguish between sequential and parallel dependencies.
 
 -}
+
+
+{-    Part 9.4 : Concurrency and Communication -}
+
+-- forkIO
+
+concurrentMessages :: IO ()
+concurrentMessages =
+  do forkIO (putStrLn "Hello from the background thread!")
+     putStrLn "Hello from the foreground thread!"
+
+
+-- MVars
+
+{-  type MVar a
+
+    newEmptyMVar :: IO (MVar a)
+
+    putMVar :: MVar a -> a -> IO ()
+
+    takeMVar :: MVar a -> IO a
+-}
+
+spawnReceiver :: MVar String -> IO ()
+spawnReceiver mvar =
+  do forkIO (do msg <- takeMVar mvar
+                putStrLn ("Message received: " ++ msg))
+
+     return ()
+
+{-   Part 9.5 : A Logging object -}
+
+data LogCommand
+  = LogMessage String
+  | LogStop (MVar ())
+
+type Logger = MVar LogCommand
+
+logger :: Logger -> Int -> IO ()
+logger loggerVar counter =
+  do cmd <- takeMVar loggerVar
+     case cmd of
+       LogMessage msg ->
+         do putStrLn ("LOG(" ++ show counter ++ "): " ++ msg)
+            logger loggerVar (counter + 1)
+       LogStop resp ->
+         do putStrLn ("LOG STOPPED")
+            putMVar resp ()
+
+makeLogger :: IO Logger
+makeLogger =
+  do m <- newEmptyMVar
+     forkIO (logger m 0)
+     return m
+
+logMessage :: Logger -> String -> IO ()
+logMessage loggerVar msg =
+  do putMVar loggerVar (LogMessage msg)
+
+logStop :: Logger -> IO ()
+logStop loggerVar =
+  do resp <- newEmptyMVar
+     putMVar loggerVar (LogStop resp)
+     ()   <- takeMVar resp
+     return ()
+
+
+{-   Part 9.6 : Making requests in parallel -}
+
+doRequest :: Logger -> Request -> IO Response
+doRequest log url =
+  do log `logMessage` ("Requesting " ++ url)
+     httpResp <- simpleHTTP (getRequest url)
+     body <- getResponseBody httpResp
+     log `logMessage` ("Request " ++ url ++ " finished")
+     return body
