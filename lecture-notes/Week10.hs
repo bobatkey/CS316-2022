@@ -6,9 +6,10 @@ import Debug.Trace
 {-     WEEK 10 : LAZY EVALUATION AND INFINITE DATA
 
    This week is about how Haskell evaluates programs, which is not the
-   same as how most programming languages work. Haskell employs 'lazy
-   evaluation', which means that values are never computed unless they
-   are needed, and the 'same' value is never computed more than once.
+   same as the way that most programming languages work. Haskell
+   employs 'lazy evaluation', which means that values are never
+   computed unless they are needed, and the 'same' value is never
+   computed more than once.
 
    CREDITS: The 'inc', 'neverFinish', 'square' and 'sumList' examples
    are taken from Hutton's "Programming in Haskell", 2nd ed, Chapter
